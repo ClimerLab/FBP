@@ -15,7 +15,7 @@ SRCDIR = src
 # Executables
 #---------------------------------------------------------------------------------------------------
 
-EXE = FBP
+EXE = fbp
 
 #---------------------------------------------------------------------------------------------------
 # Object files
@@ -47,7 +47,7 @@ all: $(EXE)
 debug: CXXFLAGS += -g
 debug: $(EXE)
 
-FBP: $(addprefix $(OBJDIR)/, FreqBasedPrunning.o)
+fbp: $(addprefix $(OBJDIR)/, FreqBasedPrunning.o)
 	$(MPICXX) $(CXXLNDIRS) $(INCLUDES) -o $@ $(addprefix $(OBJDIR)/, $(FBOOBJ)) $(CXXLNFLAGS)
 	
 $(OBJDIR)/FreqBasedPrunning.o:	$(addprefix $(SRCDIR)/, main.cpp) \
