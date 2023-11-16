@@ -46,4 +46,16 @@ NORM_VALUE - Value in DATA_FILE that indicates normal expression.
 
 LOW_VALUE - Value in DATA_FILE that indicates low expression.
 
-SET_NA_TRUE - Boolean used to indicate if missing data is treated as both high and low.                  
+SET_NA_TRUE - Boolean used to indicate if missing data is treated as both high and low.      
+
+## Outputs
+<run_tag>_runtimes.csv - File containing runtimes for each pattern size
+
+PS#_<Risk/Prot>.log - File containing the selected feature sets of size #.
+
+## Notes
+Recommend using [sync-greedy](https://github.com/ClimerLab/sync-greedy) to generate SOL_POOL_FILE.
+
+Requires Open MPI
+
+DATA_FILE should be tab seperate, the columns represent individuals and the rows represent features
