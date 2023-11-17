@@ -1,6 +1,8 @@
 # FBP
 Frequency Based Pruning (FBP) is a feature selection algorithm based upon maximizing the Youden J statistic. FBP intelligently enumerates through combinations of features, using the frequency of smaller patterns to prune away large regions of the solution space.
 
+Details on [FBP 1.0.0](https://ieeexplore.ieee.org/document/9669803) from 2021 IEEE International Conference on Bioinformatics and Biomedicine (BIBM).
+
 ## To Use
 Configure the Makefile with the locaion of open mpi libraries and binary
 
