@@ -228,7 +228,6 @@ void FBP_Controller::work() {
 
 void FBP_Controller::write_runtime_to_file(const double gs_time) const {
   FILE *output;
-  fprintf(stderr, "Runtime file: %s\n", runtime_file.c_str());
   if ((output = fopen(runtime_file.c_str(), "a+")) == nullptr) {
     fprintf(stderr, "ERROR - FBP_Controller::write_runtime_to_file - Could not open file %s\n", runtime_file.c_str());
     exit(1);

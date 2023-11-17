@@ -35,7 +35,6 @@ int main(int argc, char **argv) {
 
         for (std::size_t PS = 3; PS <= parser.getSizeT("MAX_PS"); ++PS) {
           controller.set_ps(PS);
-          fprintf(stderr, "Controller working\n");
           controller.work();
         }
 
