@@ -80,7 +80,7 @@ void SolPool::read_from_file(const std::string &file_name, const ExprsData &data
   // Loop through file, reading each line
   while (std::getline(input, tmpStr)) {
     // Count number of spaces
-    std::size_t ps = std::count(tmpStr.begin(), tmpStr.end(), ' ') + 1;
+    std::size_t ps = std::count(tmpStr.begin(), tmpStr.end(), '\t') + 1;
     std::vector<std::size_t> pat;
     pat.reserve(ps);
 
@@ -88,7 +88,7 @@ void SolPool::read_from_file(const std::string &file_name, const ExprsData &data
     iss.clear();
     iss.str(tmpStr);
 
-    while (std::getline(iss, s, ' ')) {
+    while (std::getline(iss, s, '\t')) {
       pat.push_back(std::stoul(s));
     }
 

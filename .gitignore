@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+# Data Files
+*.log
+*.sync
+*.csv
