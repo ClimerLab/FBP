@@ -159,108 +159,21 @@ void FBP_Worker::solve() {
   cur_ps = 1;
   bool valid_pattern = true;
   while (valid_pattern) {
-    // for (std::size_t i = 0; i < cur_ps; ++i) {
-    //   fprintf(stderr, "%lu ", index[i]);
-    // }
-    // fprintf(stderr, "\n");
-
-    // fprintf(stderr, "[");
-    // for (std::size_t i = 0; i <= cur_ps; ++i) {
-    //   fprintf(stderr, "%lu ", pat[i]);
-    // }
-    // fprintf(stderr, "]\n");
-
     calc_g1();
     f1 = calc_f1();
-    // fprintf(stderr, "f1: %lf\n", f1);
-
-    // f1 = static_cast<double>(data.get_num_grp1());
-    // for (std::size_t j = data.get_grp1_start(); j <= data.get_grp1_stop(); ++j) {
-    //   for (std::size_t ii = 0; ii <= cur_ps; ++ii) {
-    //     std::size_t i = pat[ii];
-    //     if (!data.get_bin(i,j)) {
-    //       --f1;
-    //       break;
-    //     }
-    //   }
-    // }
-    // f1 /= data.get_num_grp1();
-    // fprintf(stderr, "f1: %lf\n", f1);
 
     if (f1 < threshold) { // Go to next pattern
       valid_pattern = get_next_pattern();
-      // fprintf(stderr, "Get next pattern\n");
     } else if (cur_ps == ps-1) { // Test pattern
-      // fprintf(stderr, "Testing pattern\n");
       obj_value = f1 - calc_f2();
       if (obj_value >= threshold) {
         sol_pool.push_back(std::make_pair(obj_value, pat));
       }
       valid_pattern = get_next_pattern();
     } else { // Add marker
-      // fprintf(stderr, "Adding marker\n");
       valid_pattern = add_marker();
     }
   }
-
-
-
-  // bool more_trips = true;
-
-  // std::vector<std::size_t> pat(ps);
-  // pat[0] = analyte_state;
-  
-  // std::vector<std::size_t> index(ps-1, 0);
-  // for (std::size_t i = 0; i < index.size(); ++i) {
-  //   index[i] = i;
-  //   pat[i+1] = pool[i];
-  // }
-
-  // std::vector<std::size_t> trip_index = {0,1};
-  // std::vector<std::size_t> trip = {analyte_state, pool[0], pool[1]};
-
-  // if (3 + pool.size() - ps <= 0) {
-  //   fprintf(stderr, "trip size non-positive\n");
-  // }
-  // std::size_t trip_pool_size = pool.size() - (ps - 3);
-  // std::size_t num_trips = (std::size_t)FBP_Utils::C(trip_pool_size, 2);
-
-  // std::vector<std::size_t> trip_pool(trip_pool_size);
-  // for (std::size_t i = 0; i < trip_pool_size; ++i) {
-  //   trip_pool[i] = pool[i];
-  // }
-    
-  // // Loop through all possible patterns of size 3
-  // for (std::size_t i_trip = 0; i_trip < num_trips; ++i_trip) {
-  //   // Check if the ps=3 pattern has a grp1 frequency >= threshold
-
-  //   // fprintf(stderr, "Trip: (%lu,%lu,%lu)\n", trip[0], trip[1], trip[2]);
-  //   // exit(1);
-  //   if (data.get_grp1_freq(trip) >= threshold) {
-  //     FBP_Utils::init_index_from_trip_index(index, trip_index);
-  //     FBP_Utils::populate_pattern(index, pool, 1, pat);
-  //     std::size_t num_pats_to_test = (std::size_t)FBP_Utils::C(pool.size() - trip_index[1]-1, ps-3);
-
-  //     // Loop through all patterns built on the ps=3 pattern
-  //     for (std::size_t i_pat = 0; i_pat < num_pats_to_test; ++i_pat) {
-  //       grp1_freq = data.get_grp1_freq(pat);
-  //       if (grp1_freq >= threshold) {
-  //         obj_value = grp1_freq - data.get_grp2_freq(pat);
-  //         if (obj_value >= threshold) {
-  //           sol_pool.push_back(std::make_pair(obj_value, pat));
-  //         }
-  //       }
-
-  //       if (FBP_Utils::get_next_index(pool, index)) {
-  //         FBP_Utils::populate_pattern(index, pool, 1, pat);                
-  //       }
-  //     }
-  //   }
-
-  //   if ((more_trips = FBP_Utils::get_next_index(trip_pool, trip_index))) {
-  //     FBP_Utils::populate_pattern(trip_index, trip_pool, 1, trip);
-  //   }
-  // }
 }
 
 // This function recieves the problem from the conroller, and saves the values to local variables
@@ -302,9 +215,6 @@ void FBP_Worker::send_solution() {
 
   // Send each solution
   for (std::size_t i = 0; i < num_sol; ++i) {
-    // double obj_value = sol_pool[i].first;
-    // auto markers_in_sol = sol_pool[i].second;    
-
     MPI_Send(&sol_pool[i].first, 1, MPI_DOUBLE, 0, Parallel::SPARSE_SOL, MPI_COMM_WORLD);
     MPI_Send(&sol_pool[i].second[0], ps, CUSTOM_SIZE_T, 0, Parallel::SPARSE_SOL, MPI_COMM_WORLD);    
   }
