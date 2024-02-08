@@ -179,12 +179,13 @@ void FBP_Controller::work() {
   init_lb_from_greedy();
   calc_threshold_from_lb();
 
-  fprintf(stderr, "G1 threshold: %u\n", count_threshold);
+  // fprintf(stderr, "G1 threshold: %u\n", count_threshold);
   
-  obj_file = "PS" + std::to_string(ps) + "_Risk.obj";
+  std::string risk_str = data.get_risk() ? "Risk" : "Prot";
+  obj_file = run_tag + "_PS" + std::to_string(ps) + "_" + risk_str + ".obj";
   create_new_file(obj_file);
 
-  sol_file = "PS" + std::to_string(ps) + "_Risk.log";
+  sol_file = run_tag +  "_PS" + std::to_string(ps) + "_" + risk_str + ".log";
   create_new_file(sol_file);
 
   Timer timer;
@@ -204,17 +205,36 @@ void FBP_Controller::work() {
       ++num_valid;
     }
   }
+  fprintf(stderr, "%lu states remaining\n", num_valid);
 
-  while (num_valid >= ps) {
+  while (true) {
     std::size_t marker_to_test = get_next_marker();
 
-    send_problem(ps, marker_to_test, marker_pairs.getPairsGteThresh(marker_to_test, count_threshold, markers));
+    if (marker_to_test == data.get_num_bins()) {
+      break;
+    }
+
+    auto pairs = marker_pairs.getPairsGteThresh(marker_to_test, count_threshold, markers);
+
+    if (num_valid % 100 == 0) {
+      fprintf(stderr, "%lu states remaining\n", num_valid);
+    }
+
+    if (pairs.size() > ps-1) {
+      send_problem(ps, marker_to_test, pairs);
+    }
 
     markers[marker_to_test] = 0;
-    pair_count[marker_to_test] = 0;
     --num_valid;
-    auto markers_zeroed = update_markers_from_pair_counts();
-    num_valid -= markers_zeroed.size();
+
+    pair_count[marker_to_test] = 0;
+    for (auto p : pairs) {
+      --pair_count[p];
+      if (pair_count[p] < ps-1) {
+        --num_valid;
+        markers[p] = 0;
+      }
+    }
   }
   
   while (workers_still_working()) {
