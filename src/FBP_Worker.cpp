@@ -1,6 +1,7 @@
 #include "FBP_Worker.h"
 #include "Parallel.h"
 #include "FBP_Utils.h"
+#include <assert.h>
 
 FBP_Worker::FBP_Worker(const ConfigParser &parser) :  data(parser),
                                                       world_rank(Parallel::getWorldRank()),
