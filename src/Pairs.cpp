@@ -146,7 +146,12 @@ std::vector<std::size_t> Pairs::get_pool(const std::size_t idx, const unsigned i
 }
 
 std::vector<std::size_t> Pairs::getPairsLtThresh(const std::size_t idx, const unsigned int threshold) const {
-  assert(idx < values.size());
+  if (idx > size) {
+    fprintf(stderr, "Trying to access pair outside of bounds.\n");
+    fprintf(stderr, "Trying to access pairs for idx %lu, but only %lu exists.\n", idx, size);
+    exit(1);
+  }  
+  
   std::vector<std::size_t> pairs;
 
   for (std::size_t i = 0; i < idx; ++i) {
@@ -164,7 +169,11 @@ std::vector<std::size_t> Pairs::getPairsLtThresh(const std::size_t idx, const un
 }
 
 std::vector<std::size_t> Pairs::getPairsLtThresh(const std::size_t idx, const unsigned int threshold, const std::vector<bool> valid) const {
-  assert(idx < values.size());
+  if (idx > size) {
+    fprintf(stderr, "Trying to access pair outside of bounds.\n");
+    fprintf(stderr, "Trying to access pairs for idx %lu, but only %lu exists.\n", idx, size);
+    exit(1);
+  }
   
   std::vector<std::size_t> pairs;
 
@@ -185,7 +194,11 @@ std::vector<std::size_t> Pairs::getPairsLtThresh(const std::size_t idx, const un
 }
 
 std::vector<std::size_t> Pairs::getPairsLtThresh(const std::size_t idx, const unsigned int threshold, const std::vector<int> valid) const {
-    assert(idx < values.size());
+  if (idx > size) {
+    fprintf(stderr, "Trying to access pair outside of bounds.\n");
+    fprintf(stderr, "Trying to access pairs for idx %lu, but only %lu exists.\n", idx, size);
+    exit(1);
+  }
   
   std::vector<std::size_t> pairs;
 
@@ -206,7 +219,7 @@ std::vector<std::size_t> Pairs::getPairsLtThresh(const std::size_t idx, const un
 }
 
 std::size_t Pairs::getNumPairsGteThresh(const std::size_t idx, const unsigned int threshold) const {
-  if (idx >= size) {
+  if (idx > size) {
     fprintf(stderr, "Trying to access pair outside of bounds.\n");
     fprintf(stderr, "Trying to access pairs for idx %lu, but only %lu exists.\n", idx, size);
     exit(1);

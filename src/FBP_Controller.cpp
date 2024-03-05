@@ -196,7 +196,7 @@ void FBP_Controller::work() {
   update_markers_from_pair_counts();
 
   pair_count.clear();
-  pair_count.resize(data.get_num_bins()-1, 0);
+  pair_count.resize(data.get_num_bins(), 0);
   update_pair_count();
   
   std::size_t num_valid = 0;
